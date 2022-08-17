@@ -10,11 +10,13 @@ import java.util.UUID;
 @Table
 @Data
 @Builder
-public class Entity1 {
+public class Entity2 {
 
     @Id
     private UUID id;
 
     private String name;
+
+    private UUID parentId;
 
 }

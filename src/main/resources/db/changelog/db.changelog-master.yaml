@@ -3,15 +3,5 @@ databaseChangeLog:
        id:  1
        author:  nvoxland
        changes:
-         -  createTable:
-              tableName:  entity1
-              columns:
-                -  column:
-                     name:  id
-                     type:  uuid
-                     constraints:
-                       primaryKey:  true
-                       nullable:  false
-                -  column:
-                     name:  name
-                     type:  varchar(50)
+         - sqlFile:
+             path: db/changelog/sql/tables.sql
