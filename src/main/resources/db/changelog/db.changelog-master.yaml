@@ -13,5 +13,5 @@ databaseChangeLog:
                        primaryKey:  true
                        nullable:  false
                 -  column:
-                     name:  firstname
+                     name:  name
                      type:  varchar(50)
