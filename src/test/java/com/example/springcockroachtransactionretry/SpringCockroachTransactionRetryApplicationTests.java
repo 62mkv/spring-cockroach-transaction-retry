@@ -1,6 +1,7 @@
 package com.example.springcockroachtransactionretry;
 
 import com.example.springcockroachtransactionretry.repository.Entity1Repository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
@@ -37,9 +40,19 @@ class SpringCockroachTransactionRetryApplicationTests {
 	@Autowired
 	private Entity1Repository repository;
 
+	@Autowired
+	private ReactiveTransactionManager transactionManager;
+	private TransactionalOperator rxtx;
+
+	@BeforeEach
+	void setUp() {
+		this.rxtx = TransactionalOperator.create(this.transactionManager);
+	}
+
 	@Test
-	void contextLoads() {
-		StepVerifier.create(repository.findAll())
+	void testTransactionRetries() {
+		var flow = rxtx.transactional(repository.findAll());
+		StepVerifier.create(flow)
 				.verifyComplete();
 	}
 
